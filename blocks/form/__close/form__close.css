@@ -1,4 +1,4 @@
-.popup__close {
+.form__close {
     position: absolute;
     top: -40px;
     right: -40px;
@@ -10,12 +10,12 @@
     cursor: pointer;
 }
 
-.popup__close:hover {
+.form__close:hover {
     opacity: .6;
 }
 
 @media screen and (max-width: 576px) {
-    .popup__close {
+    .form__close {
        width: 25px;
        height: 25px;
        top: -35px;
@@ -24,7 +24,7 @@
 }
 
 @media screen and (max-width: 420px) {
-    .popup__close {
+    .form__close {
         width: 20px;
         height: 20px;
         top: -36px;
