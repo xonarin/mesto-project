@@ -1,6 +1,10 @@
 .profile__user-description {
+    max-width: 350px;
     font-size: 18px;
     line-height: 22px;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    overflow: hidden;
     margin: 0;
 }
 
