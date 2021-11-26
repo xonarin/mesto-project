@@ -113,9 +113,7 @@ profileEditBtn.addEventListener('click', function() {
   popupOpened(popupProfile);
 })
 
-addCardBtn.addEventListener('click', function() {
-  popupOpened(popupAddCard);
-})
+addCardBtn.addEventListener('click', () => popupOpened(popupAddCard));
 
 /* Закрываем поп апы по клику на крестик начало */
 
