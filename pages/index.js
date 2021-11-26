@@ -9,7 +9,7 @@ const profileForm = popupProfile.querySelector('.form');
 
 const btnAddNewCard = document.querySelector('.profile__add-button');
 const popupAddCard = document.querySelector('.popup_form_add-card');
-const popupAddCardName = popupAddCard.querySelector('.form__input_type_name');
+const popupAddCardName = popupAddCard.querySelector('.form__input_type_title');
 const popupAddCardLink = popupAddCard.querySelector('.form__input_type_link');
 const popupAddCardClose = popupAddCard.querySelector('.form__close');
 const addCardForm = popupAddCard.querySelector('.form');
