@@ -1,13 +1,13 @@
 const profileEditBtn  = document.querySelector('.profile__edit-button');
 const profileUserName = document.querySelector('.profile__user-name');
-const profileUserDesc = document.querySelector('.profile__user-description');
+const profileUserDescription = document.querySelector('.profile__user-description');
 const popupProfile = document.querySelector('.popup_form_edit-profile');
-const popupProfileName = popupProfile.querySelector('.form__input_type_name');
-const popupProfileAbout = popupProfile.querySelector('.form__input_type_about');
-const popupProfileClose = popupProfile.querySelector('.form__close');
+const popupProfileNameInput = popupProfile.querySelector('.form__input_type_name');
+const popupProfileAboutInput = popupProfile.querySelector('.form__input_type_about');
+const popupProfileCloseBtn = popupProfile.querySelector('.form__close');
 const profileForm = popupProfile.querySelector('.form');
 
-const addCardBtn = document.querySelector('.profile__add-button');
+const btnAddNewCard = document.querySelector('.profile__add-button');
 const popupAddCard = document.querySelector('.popup_form_add-card');
 const popupAddCardName = popupAddCard.querySelector('.form__input_type_name');
 const popupAddCardLink = popupAddCard.querySelector('.form__input_type_link');
@@ -50,12 +50,13 @@ const initialCards = [
 
 /* Функция создания карточки */
 
-function addCard(cardImage, cardName) {
+function createCard(cardImage, cardName) {
   const cardTemplate = document.querySelector('#card-template').content;
   const cardElement = cardTemplate.querySelector('.element').cloneNode(true);
+  const cardElementImage = cardElement.querySelector('.element__image');
 
-  cardElement.querySelector('.element__image').src = cardImage;
-  cardElement.querySelector('.element__image').alt = cardName;
+  cardElementImage.src = cardImage;
+  cardElementImage.alt = cardName;
   cardElement.querySelector('.element__title').textContent = cardName;
 
 
@@ -85,9 +86,9 @@ function addCard(cardImage, cardName) {
 
 /* Функция перебора массива с  карточками */
 
-function ArrayInitialCards(initialCards) {
+function renderInitialCards(initialCards) {
   initialCards.forEach((item) => {
-    elementList.append(addCard(item.link, item.name));
+    elementList.append(createCard(item.link, item.name));
   })
 }
 
@@ -107,17 +108,17 @@ function popupClose(popup) {
 
 profileEditBtn.addEventListener('click', function() {
 
-  popupProfileName.value = profileUserName.textContent;
-  popupProfileAbout.value = profileUserDesc.textContent;
+  popupProfileNameInput.value = profileUserName.textContent;
+  popupProfileAboutInput.value = profileUserDescription.textContent;
 
   popupOpened(popupProfile);
 })
 
-addCardBtn.addEventListener('click', () => popupOpened(popupAddCard));
+btnAddNewCard.addEventListener('click', () => popupOpened(popupAddCard));
 
 /* Закрываем поп апы по клику на крестик начало */
 
-popupProfileClose.addEventListener('click', () => popupClose(popupProfile));
+popupProfileCloseBtn.addEventListener('click', () => popupClose(popupProfile));
 
 popupAddCardClose.addEventListener('click', () => popupClose(popupAddCard));
 
@@ -126,30 +127,30 @@ popupViewClose.addEventListener('click', () => popupClose(popupView));
 
 /* Функция формы для изменения профиля*/
 
-function profileEditSubmit(event) {
+function handleProfileEditSubmit(event) {
   event.preventDefault();
 
-  profileUserName.textContent = popupProfileName.value;
-  profileUserDesc.textContent = popupProfileAbout.value;
+  profileUserName.textContent = popupProfileNameInput.value;
+  profileUserDescription.textContent = popupProfileAboutInput.value;
 
   popupClose(popupProfile);
 
   profileForm.reset();
 }
 
-profileForm.addEventListener('submit', profileEditSubmit);
+profileForm.addEventListener('submit', handleProfileEditSubmit);
 
 /* Функция добавления новой карточки из формы */
-function addCardSubmit(event) {
+function handleNewCardSubmit(event) {
   event.preventDefault();
 
-  elementList.prepend(addCard(popupAddCardLink.value, popupAddCardName.value));
+  elementList.prepend(createCard(popupAddCardLink.value, popupAddCardName.value));
 
   popupClose(popupAddCard);
   addCardForm.reset();
 }
 
-addCardForm.addEventListener('submit', addCardSubmit);
+addCardForm.addEventListener('submit', handleNewCardSubmit);
 
 /* Вызов функции добавления карточек из массива */
-ArrayInitialCards(initialCards);
+renderInitialCards(initialCards);
