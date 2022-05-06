@@ -121,6 +121,20 @@ popupAddCardClose.addEventListener('click', () => popupClose(popupAddCard));
 popupViewClose.addEventListener('click', () => popupClose(popupView));
 
 
+/* Закрываем поп апы по клику на оверлей */
+document.addEventListener('click', function(evt) {
+  if(evt.target.classList.contains('popup_opened')) {
+    popupClose(evt.target);
+  }
+})
+
+/* Закрываем поп апы по нажатию на ESC */
+document.addEventListener('keydown', function(evt) {
+  if(evt.key == 'Escape') {
+    popupClose(document.querySelector('.popup_opened'));
+  }
+})
+
 /* Функция формы для изменения профиля*/
 function handleProfileEditSubmit(event) {
   event.preventDefault();
