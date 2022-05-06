@@ -43,9 +43,12 @@
       <div class="popup__container">
         <h3 class="popup__title">Редактировать профиль</h3>
 
-        <form action="#" class="form" name="form">
-          <input type="text" class="form__input form__input_type_name" name="name" placeholder="Имя">
-          <input type="text" class="form__input form__input_type_about" name="about-me" placeholder="О себе">
+        <form action="#" class="form" name="form" novalidate>
+          <input id="profile-name" type="text" class="form__input form__input_type_name" name="name" placeholder="Имя" minlength="2" maxlength="40" required>
+          <span class="form__input-error profile-name-error"></span>
+
+          <input id="profile-about" type="text" class="form__input form__input_type_about" name="about-me" placeholder="О себе" minlength="2" maxlength="200" required>
+          <span class="form__input-error profile-about-error"></span>
 
           <button type="submit" class="form__submit">Сохранить</button>
         </form>
@@ -60,9 +63,12 @@
       <div class="popup__container">
         <h3 class="popup__title">Новое место</h3>
 
-        <form action="#" class="form" name="form">
-          <input type="text" class="form__input form__input_type_title" name="name" placeholder="Название" required>
-          <input type="url" class="form__input form__input_type_link" name="link-image" placeholder="Ссылка на картинку" required>
+        <form action="#" class="form" name="form" novalidate>
+          <input id="card-name" type="text" class="form__input form__input_type_title" name="name" placeholder="Название" minlength="2" maxlength="30" required>
+          <span class="form__input-error card-name-error"></span>
+
+          <input id="card-url" type="url" class="form__input form__input_type_link" name="link-image" placeholder="Ссылка на картинку" required>
+          <span class="form__input-error card-url-error"></span>
 
           <button type="submit" class="form__submit">Создать</button>
         </form>
