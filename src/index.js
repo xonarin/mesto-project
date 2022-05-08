@@ -7,7 +7,8 @@ import {
   popupAddCard,
   popupProfile,
   popupProfileNameInput,
-  popupProfileAboutInput
+  popupProfileAboutInput,
+  popups
 } from './components/modal.js';
 
 
@@ -40,19 +41,15 @@ profileEditBtn.addEventListener('click', function () {
 
 btnAddNewCard.addEventListener('click', () => openPopup(popupAddCard));
 
-/* Закрываем поп апы по клику на оверлей */
-document.addEventListener('click', function (evt) {
-  if (evt.target.classList.contains('popup_opened')) {
-    closePopup(evt.target);
-  }
+/* Закрытие по оверлею */
+popups.forEach((popup) => {
+  popup.addEventListener('mousedown', (evt) => {
+    if (evt.target.classList.contains('popup_opened')) {
+      closePopup(popup)
+    }
+  })
 })
 
-/* Закрываем поп апы по нажатию на ESC */
-document.addEventListener('keydown', function (evt) {
-  if (evt.key === 'Escape') {
-    closePopup(document.querySelector('.popup_opened'));
-  }
-})
 
 /* Функция формы для изменения профиля*/
 function handleProfileEditSubmit(event) {
