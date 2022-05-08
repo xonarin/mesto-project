@@ -10,18 +10,31 @@ const popupProfile = document.querySelector('.popup_form_edit-profile');
 const popupProfileNameInput = popupProfile.querySelector('.form__input_type_name');
 const popupProfileAboutInput = popupProfile.querySelector('.form__input_type_about');
 const popupProfileCloseBtn = popupProfile.querySelector('.form__close');
+const popups = document.querySelectorAll('.popup')
 
 
 /* Открытие поп апа */
 function openPopup(popup) {
   popup.classList.add('popup_opened');
+  document.addEventListener('keydown', closeByEscape);
 }
 
 
 /* Закрытие поп апа */
 function closePopup(popup) {
   popup.classList.remove('popup_opened');
+  document.removeEventListener('keydown', closeByEscape);
 }
+
+
+/* Закрытие попап по ESC */
+function closeByEscape(evt) {
+  if (evt.key === 'Escape') {
+    const openedPopup = document.querySelector('.popup_opened');
+    closePopup(openedPopup);
+  }
+}
+
 
 
 /* Закрываем поп апы по клику на крестик начало */
@@ -40,5 +53,6 @@ export {
   popupAddCardLink,
   popupProfile,
   popupProfileNameInput,
-  popupProfileAboutInput
+  popupProfileAboutInput,
+  popups
 }
