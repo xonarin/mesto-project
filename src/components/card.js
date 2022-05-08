@@ -1,6 +1,6 @@
 import {
-  popupOpened,
-  popupClose,
+  openPopup,
+  closePopup,
   popupView,
   popupViewImage,
   popupViewDesc,
@@ -11,6 +11,8 @@ import {
 
 const elementList = document.querySelector('.elements__list');
 const addCardForm = popupAddCard.querySelector('.form');
+const buttonForm = addCardForm.querySelector('.form__submit');
+const cardTemplate = document.querySelector('#card-template').content;
 
 const initialCards = [
   {
@@ -42,7 +44,6 @@ const initialCards = [
 /* Функция создания карточки */
 
 function createCard(cardImage, cardName) {
-  const cardTemplate = document.querySelector('#card-template').content;
   const cardElement = cardTemplate.querySelector('.element').cloneNode(true);
   const cardElementImage = cardElement.querySelector('.element__image');
 
@@ -67,7 +68,7 @@ function createCard(cardImage, cardName) {
     popupViewImage.alt = cardName;
     popupViewDesc.textContent = cardName;
 
-    popupOpened(popupView);
+    openPopup(popupView);
 
   })
 
@@ -88,8 +89,10 @@ function handleNewCardSubmit(event) {
 
   elementList.prepend(createCard(popupAddCardLink.value, popupAddCardName.value));
 
-  popupClose(popupAddCard);
+  closePopup(popupAddCard);
   addCardForm.reset();
+  buttonForm.classList.add('form__submit_disabled');
+  buttonForm.disabled = true;
 }
 
 addCardForm.addEventListener('submit', handleNewCardSubmit);

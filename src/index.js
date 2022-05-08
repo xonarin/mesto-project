@@ -2,8 +2,8 @@ import './pages/index.css'; // добавьте импорт главного ф
 import { renderInitialCards, initialCards } from './components/card.js';
 import { enableValidation } from './components/validate.js';
 import {
-  popupOpened,
-  popupClose,
+  openPopup,
+  closePopup,
   popupAddCard,
   popupProfile,
   popupProfileNameInput,
@@ -35,22 +35,22 @@ profileEditBtn.addEventListener('click', function () {
   popupProfileNameInput.value = profileUserName.textContent;
   popupProfileAboutInput.value = profileUserDescription.textContent;
 
-  popupOpened(popupProfile);
+  openPopup(popupProfile);
 })
 
-btnAddNewCard.addEventListener('click', () => popupOpened(popupAddCard));
+btnAddNewCard.addEventListener('click', () => openPopup(popupAddCard));
 
 /* Закрываем поп апы по клику на оверлей */
 document.addEventListener('click', function (evt) {
   if (evt.target.classList.contains('popup_opened')) {
-    popupClose(evt.target);
+    closePopup(evt.target);
   }
 })
 
 /* Закрываем поп апы по нажатию на ESC */
 document.addEventListener('keydown', function (evt) {
   if (evt.key === 'Escape') {
-    popupClose(document.querySelector('.popup_opened'));
+    closePopup(document.querySelector('.popup_opened'));
   }
 })
 
@@ -61,7 +61,7 @@ function handleProfileEditSubmit(event) {
   profileUserName.textContent = popupProfileNameInput.value;
   profileUserDescription.textContent = popupProfileAboutInput.value;
 
-  popupClose(popupProfile);
+  closePopup(popupProfile);
 
   profileForm.reset();
 }

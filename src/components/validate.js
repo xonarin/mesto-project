@@ -37,10 +37,10 @@ const enableValidation = (settings) => {
   const toggleButtonState = (inputList, buttonElement) => {
     if (hasInvalidInput(inputList)) {
       buttonElement.classList.add(settings.inactiveButtonClass);
-
+      buttonElement.disabled = true;
     } else {
-
       buttonElement.classList.remove(settings.inactiveButtonClass);
+      buttonElement.disabled = false;
     }
   }
 

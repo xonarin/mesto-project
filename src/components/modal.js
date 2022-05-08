@@ -13,25 +13,25 @@ const popupProfileCloseBtn = popupProfile.querySelector('.form__close');
 
 
 /* Открытие поп апа */
-function popupOpened(popup) {
+function openPopup(popup) {
   popup.classList.add('popup_opened');
 }
 
 
 /* Закрытие поп апа */
-function popupClose(popup) {
+function closePopup(popup) {
   popup.classList.remove('popup_opened');
 }
 
 
 /* Закрываем поп апы по клику на крестик начало */
-popupProfileCloseBtn.addEventListener('click', () => popupClose(popupProfile));
-popupAddCardClose.addEventListener('click', () => popupClose(popupAddCard));
-popupViewClose.addEventListener('click', () => popupClose(popupView));
+popupProfileCloseBtn.addEventListener('click', () => closePopup(popupProfile));
+popupAddCardClose.addEventListener('click', () => closePopup(popupAddCard));
+popupViewClose.addEventListener('click', () => closePopup(popupView));
 
 export {
-  popupOpened,
-  popupClose,
+  openPopup,
+  closePopup,
   popupView,
   popupViewImage,
   popupViewDesc,
