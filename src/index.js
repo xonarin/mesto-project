@@ -1,66 +1,88 @@
 import './pages/index.css'; // добавьте импорт главного файла стилей
-import { renderInitialCards, initialCards } from './components/card.js';
-import { enableValidation } from './components/validate.js';
+import { handleNewCardSubmit } from './components/card.js';
+import { getProfileInfo, editProfile, updateAvatar } from './components/api.js';
 import {
   openPopup,
   closePopup,
   popupAddCard,
   popupProfile,
-  popupProfileNameInput,
-  popupProfileAboutInput,
-  popups
+  popupAvatar
 } from './components/modal.js';
 
+import {
+  profileEditBtn,
+  profileAvatarEdit,
+  profileAvatarImage,
+  profileUserName,
+  profileUserDescription,
+  profileForm,
+  btnAddNewCard,
+  formEditProfile,
+  formAvatar,
+  formAddCard
+} from './components/utils.js';
 
-const profileEditBtn = document.querySelector('.profile__edit-button');
-const profileUserName = document.querySelector('.profile__user-name');
-const profileUserDescription = document.querySelector('.profile__user-description');
-const profileForm = popupProfile.querySelector('.form');
-const btnAddNewCard = document.querySelector('.profile__add-button');
+export let profileId = "";
 
-enableValidation({
-  formSelector: '.form',
-  inputSelector: '.form__input',
-  submitButtonSelector: '.form__submit',
-  inactiveButtonClass: 'form__submit_disabled',
-  inputErrorClass: 'form__input_type_error',
-  errorClass: 'form__input-error_active'
-});
+getProfileInfo()
+  .then((profile) => {
+    profileId = profile._id;
+    profileUserName.textContent = profile.name;
+    profileUserDescription.textContent = profile.about;
+    profileAvatarImage.src = profile.avatar;
+  })
+  .catch((err) => {
+    console.log(err);
+  })
 
-/* Вызов функции добавления карточек из массива */
-renderInitialCards(initialCards);
+/* Функция формы для изменения профиля*/
+function handleProfileEditSubmit(event) {
+  event.preventDefault();
+  formEditProfile.elements.submit.textContent = 'Сохранение...';
+  editProfile(formEditProfile.elements.name.value, formEditProfile.elements.about.value)
+    .then(() => {
+      profileUserName.textContent = formEditProfile.elements.name.value;
+      profileUserDescription.textContent = formEditProfile.elements.about.value;
+    })
+    .catch((err) => {
+      console.log(err);
+    })
+    .finally(() => {
+      closePopup(popupProfile);
+      profileForm.reset();
+    })
+
+}
+
+
+function handleAvatarEditSubmit(event) {
+  event.preventDefault();
+  formAvatar.elements.submit.textContent = 'Сохранение...';
+  updateAvatar(formAvatar.elements.link.value)
+    .then(() => {
+      profileAvatarImage.src = formAvatar.elements.link.value;
+    })
+    .catch((err) => {
+      console.log(err);
+    })
+    .finally(() => {
+      closePopup(popupAvatar);
+    })
+}
+
+
+formAvatar.addEventListener('submit', handleAvatarEditSubmit);
+profileForm.addEventListener('submit', handleProfileEditSubmit);
+formAddCard.addEventListener('submit', handleNewCardSubmit);
 
 /* Открываем поп апы по клику на редактировать профиль и добавить карточку */
 profileEditBtn.addEventListener('click', function () {
-
-  popupProfileNameInput.value = profileUserName.textContent;
-  popupProfileAboutInput.value = profileUserDescription.textContent;
-
+  formEditProfile.elements.name.value = profileUserName.textContent;
+  formEditProfile.elements.about.value = profileUserDescription.textContent;
   openPopup(popupProfile);
 })
 
 btnAddNewCard.addEventListener('click', () => openPopup(popupAddCard));
 
-/* Закрытие по оверлею */
-popups.forEach((popup) => {
-  popup.addEventListener('mousedown', (evt) => {
-    if (evt.target.classList.contains('popup_opened')) {
-      closePopup(popup)
-    }
-  })
-})
-
-
-/* Функция формы для изменения профиля*/
-function handleProfileEditSubmit(event) {
-  event.preventDefault();
-
-  profileUserName.textContent = popupProfileNameInput.value;
-  profileUserDescription.textContent = popupProfileAboutInput.value;
-
-  closePopup(popupProfile);
-
-  profileForm.reset();
-}
-
-profileForm.addEventListener('submit', handleProfileEditSubmit);
+/* Открытие поп ап редактирования аватарки */
+profileAvatarEdit.addEventListener('click', () => openPopup(popupAvatar));
