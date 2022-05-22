@@ -1,17 +1,10 @@
 const popupView = document.querySelector('.popup_view-image');
 const popupViewImage = popupView.querySelector('.popup__image');
 const popupViewDesc = popupView.querySelector('.popup__description');
-const popupViewClose = popupView.querySelector('.form__close');
 const popupAddCard = document.querySelector('.popup_form_add-card');
-const popupAddCardClose = popupAddCard.querySelector('.form__close');
-const popupAddCardName = popupAddCard.querySelector('.form__input_type_title');
-const popupAddCardLink = popupAddCard.querySelector('.form__input_type_link');
 const popupProfile = document.querySelector('.popup_form_edit-profile');
-const popupProfileNameInput = popupProfile.querySelector('.form__input_type_name');
-const popupProfileAboutInput = popupProfile.querySelector('.form__input_type_about');
-const popupProfileCloseBtn = popupProfile.querySelector('.form__close');
-const popups = document.querySelectorAll('.popup')
-
+const popupAvatar = document.querySelector('.popup_avatar');
+const popupConfirmDelete = document.querySelector('.popup_delete');
 
 /* Открытие поп апа */
 function openPopup(popup) {
@@ -36,11 +29,23 @@ function closeByEscape(evt) {
 }
 
 
+/* Закрываем поп апы по клику на крестик */
+Array.from(document.querySelectorAll(".form__close")).forEach((elem) => {
+  elem.addEventListener("click", (evt) => {
+    closePopup(evt.target.closest(".popup"));
+  });
+});
 
-/* Закрываем поп апы по клику на крестик начало */
-popupProfileCloseBtn.addEventListener('click', () => closePopup(popupProfile));
-popupAddCardClose.addEventListener('click', () => closePopup(popupAddCard));
-popupViewClose.addEventListener('click', () => closePopup(popupView));
+
+/* Закрытие по оверлею */
+Array.from(document.querySelectorAll(".popup")).forEach((popup) => {
+  popup.addEventListener('mousedown', (evt) => {
+    if (evt.target.classList.contains('popup_opened')) {
+      closePopup(popup)
+    }
+  })
+})
+
 
 export {
   openPopup,
@@ -49,10 +54,7 @@ export {
   popupViewImage,
   popupViewDesc,
   popupAddCard,
-  popupAddCardName,
-  popupAddCardLink,
   popupProfile,
-  popupProfileNameInput,
-  popupProfileAboutInput,
-  popups
+  popupAvatar,
+  popupConfirmDelete
 }
