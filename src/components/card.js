@@ -10,21 +10,14 @@ import {
   popupConfirmDelete
 } from '../components/modal.js';
 
-import { getCards, addCard, removeCard, addLikeCard, removeLikeCard } from '../components/api.js';
+import { addCard, removeCard, addLikeCard, removeLikeCard } from '../components/api.js';
 import { profileId } from '../index.js';
 
 const elementList = document.querySelector('.elements__list');
 const cardTemplate = document.querySelector('#card-template').content;
+let cardElementDelete;
+let cardElementId;
 
-/* Получаем массив карточек по API и передаём результат в функцию renderInitialCards */
-getCards()
-  .then((card) => {
-    console.log(card)
-    renderInitialCards(card);
-  })
-  .catch((err) => {
-    console.log(err);
-  })
 /* Функция создания карточки */
 
 
@@ -52,42 +45,43 @@ function createCard(cardImage, cardName, cardId, cardOwner, cardLikes) {
     cardLikeCount.textContent = 0;
   }
 
-
   /* Удаление карточки */
   if (cardOwner === profileId) {
     btnDeleteCard(cardElement);
 
-    cardElement.querySelector('.element__btn-trash').addEventListener('click', function (event) {
+    const cardElementTrash = cardElement.querySelector(".element__btn-trash");
+
+    cardElementTrash.addEventListener("click", (evt) => {
+      cardElementDelete = evt.target.closest(".element");
+      cardElementId = cardId;
       openPopup(popupConfirmDelete);
-      confirmRemove(event);
-    })
+    });
+
   }
 
-  /* Подтверждение удаление карточки */
-  function confirmRemove(card) {
-    popupConfirmDelete.querySelector('.form__submit_confirm').addEventListener('click', function (event) {
-      removeCard(cardId)
-        .then(() => {
-          console.log(cardId)
-          card.target.closest('.element').remove();
-          closePopup(popupConfirmDelete);
-        })
-        .catch((err) => {
-          console.log(err);
-        })
-    })
-  }
 
   /* Открытие карточки в popup окне*/
-  cardElement.querySelector('.element__image').addEventListener('click', function () {
+  cardElementImage.addEventListener('click', function () {
     popupViewImage.src = cardImage;
     popupViewImage.alt = cardName;
     popupViewDesc.textContent = cardName;
     openPopup(popupView);
   })
-
   return cardElement;
 }
+
+/* Подтверждение удаление карточки */
+export function confirmRemove(card) {
+  removeCard(cardElementId)
+    .then(() => {
+      cardElementDelete.remove();
+      closePopup(popupConfirmDelete);
+    })
+    .catch((err) => {
+      console.log(err);
+    })
+}
+
 
 function likeCard(cardElement, cardLikeCount, cardId) {
   cardElement.querySelector('.element__like-button').addEventListener('click', function (event) {
@@ -146,7 +140,10 @@ function handleNewCardSubmit(event) {
     .catch((err) => {
       console.log(err);
     })
+    .finally(() => {
+      formAddCard.elements.submit.textContent = 'Создать';
+    })
 
 }
 
-export { handleNewCardSubmit }
+export { handleNewCardSubmit, renderInitialCards }

@@ -1,12 +1,13 @@
 import './pages/index.css'; // добавьте импорт главного файла стилей
-import { handleNewCardSubmit } from './components/card.js';
-import { getProfileInfo, editProfile, updateAvatar } from './components/api.js';
+import { handleNewCardSubmit, renderInitialCards, confirmRemove } from './components/card.js';
+import { getProfileInfo, getCards, editProfile, updateAvatar } from './components/api.js';
 import {
   openPopup,
   closePopup,
   popupAddCard,
   popupProfile,
-  popupAvatar
+  popupAvatar,
+  popupConfirmDeleteBtn
 } from './components/modal.js';
 
 import {
@@ -24,12 +25,14 @@ import {
 
 export let profileId = "";
 
-getProfileInfo()
-  .then((profile) => {
+/* Получаем профиля и массива карточек по API и передаём результат в функцию renderInitialCards */
+Promise.all([getProfileInfo(), getCards()])
+  .then(([profile, card]) => {
     profileId = profile._id;
     profileUserName.textContent = profile.name;
     profileUserDescription.textContent = profile.about;
     profileAvatarImage.src = profile.avatar;
+    renderInitialCards(card);
   })
   .catch((err) => {
     console.log(err);
@@ -43,15 +46,15 @@ function handleProfileEditSubmit(event) {
     .then(() => {
       profileUserName.textContent = formEditProfile.elements.name.value;
       profileUserDescription.textContent = formEditProfile.elements.about.value;
+      closePopup(popupProfile);
+      profileForm.reset();
     })
     .catch((err) => {
       console.log(err);
     })
     .finally(() => {
-      closePopup(popupProfile);
-      profileForm.reset();
+      formEditProfile.elements.submit.textContent = 'Сохранить';
     })
-
 }
 
 
@@ -61,12 +64,14 @@ function handleAvatarEditSubmit(event) {
   updateAvatar(formAvatar.elements.link.value)
     .then(() => {
       profileAvatarImage.src = formAvatar.elements.link.value;
+      closePopup(popupAvatar);
+      formAvatar.reset();
     })
     .catch((err) => {
       console.log(err);
     })
     .finally(() => {
-      closePopup(popupAvatar);
+      formAvatar.elements.submit.textContent = 'Сохранить';
     })
 }
 
@@ -86,3 +91,6 @@ btnAddNewCard.addEventListener('click', () => openPopup(popupAddCard));
 
 /* Открытие поп ап редактирования аватарки */
 profileAvatarEdit.addEventListener('click', () => openPopup(popupAvatar));
+
+/* Подтверждение удаления карточки */
+popupConfirmDeleteBtn.addEventListener("click", confirmRemove);
