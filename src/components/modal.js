@@ -5,6 +5,7 @@ const popupAddCard = document.querySelector('.popup_form_add-card');
 const popupProfile = document.querySelector('.popup_form_edit-profile');
 const popupAvatar = document.querySelector('.popup_avatar');
 const popupConfirmDelete = document.querySelector('.popup_delete');
+const popupConfirmDeleteBtn = document.querySelector('.form__submit_confirm');
 
 /* Открытие поп апа */
 function openPopup(popup) {
@@ -28,19 +29,14 @@ function closeByEscape(evt) {
   }
 }
 
-
-/* Закрываем поп апы по клику на крестик */
-Array.from(document.querySelectorAll(".form__close")).forEach((elem) => {
-  elem.addEventListener("click", (evt) => {
-    closePopup(evt.target.closest(".popup"));
-  });
-});
-
-
-/* Закрытие по оверлею */
+/* Закрытие по оверлею и крестику */
 Array.from(document.querySelectorAll(".popup")).forEach((popup) => {
   popup.addEventListener('mousedown', (evt) => {
     if (evt.target.classList.contains('popup_opened')) {
+      closePopup(popup)
+    }
+
+    if (evt.target.classList.contains('form__close')) {
       closePopup(popup)
     }
   })
@@ -56,5 +52,6 @@ export {
   popupAddCard,
   popupProfile,
   popupAvatar,
-  popupConfirmDelete
+  popupConfirmDelete,
+  popupConfirmDeleteBtn
 }

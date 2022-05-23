@@ -1,6 +1,6 @@
 import { apiConfig } from "../components/utils.js";
 
-function checkStatus(res) {
+function checkResponse(res) {
   if (res.ok) {
     return res.json()
   } else {
@@ -13,7 +13,7 @@ export const getProfileInfo = () => {
     method: "GET",
     headers: apiConfig.headers
   })
-    .then(checkStatus)
+    .then(checkResponse)
 }
 
 export const getCards = () => {
@@ -21,7 +21,7 @@ export const getCards = () => {
     method: 'GET',
     headers: apiConfig.headers
   })
-    .then(checkStatus)
+    .then(checkResponse)
 }
 
 export const addCard = (nameCard, linkCard) => {
@@ -33,7 +33,7 @@ export const addCard = (nameCard, linkCard) => {
       link: linkCard
     })
   })
-    .then(checkStatus)
+    .then(checkResponse)
 }
 
 
@@ -46,7 +46,7 @@ export const editProfile = (name, about) => {
       about: about
     })
   })
-    .then(checkStatus)
+    .then(checkResponse)
 }
 
 
@@ -58,7 +58,7 @@ export const updateAvatar = (link) => {
       avatar: link
     })
   })
-    .then(checkStatus)
+    .then(checkResponse)
 }
 
 export const removeCard = (cardId) => {
@@ -66,7 +66,7 @@ export const removeCard = (cardId) => {
     method: 'DELETE',
     headers: apiConfig.headers
   })
-    .then(checkStatus)
+    .then(checkResponse)
 }
 
 export const addLikeCard = (cardId) => {
@@ -74,7 +74,7 @@ export const addLikeCard = (cardId) => {
     method: 'PUT',
     headers: apiConfig.headers
   })
-    .then(checkStatus)
+    .then(checkResponse)
 }
 
 export const removeLikeCard = (cardId) => {
@@ -82,5 +82,5 @@ export const removeLikeCard = (cardId) => {
     method: 'DELETE',
     headers: apiConfig.headers
   })
-    .then(checkStatus)
+    .then(checkResponse)
 }
