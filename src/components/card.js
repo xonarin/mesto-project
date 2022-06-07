@@ -65,16 +65,16 @@ export default class Card {
   // Добавление слушателей на кнопки, которые мы отрисовали ранее
   _setEventListeners() {
     this._elementImage.addEventListener("click", () => {
-      this._handleOpenCardClick(this); // Добавил сам элемент в this._свойство, вместо просто this
+      this._handleOpenCardClick(this);
     });
 
     this._likeButton.addEventListener("click", () => {
-      this._handleLikeClick(this, this._id); // Добавил сам элемент в this._свойство, вместо просто this
+      this._handleLikeClick(this, this._id);
     });
 
     if (this._deleteButton) {
       this._deleteButton.addEventListener("click", () => {
-        this._handleDeleteClick(this, this._id); // Добавил сам элемент в this._свойство, вместо просто this
+        this._handleDeleteClick(this, this._id);
       });
     }
   }
