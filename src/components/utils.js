@@ -1,16 +1,10 @@
 import { enableValidation } from '../components/validate.js';
-import { popupProfile } from '../components/modal.js';
+import Api from './Api.js';
 
 const profileEditBtn = document.querySelector('.profile__edit-button');
 const profileAvatarEdit = document.querySelector('.profile__avatar-container');
-const profileAvatarImage = document.querySelector('.profile__avatar');
-const profileUserName = document.querySelector('.profile__user-name');
-const profileUserDescription = document.querySelector('.profile__user-description');
-const profileForm = popupProfile.querySelector('.form');
 const btnAddNewCard = document.querySelector('.profile__add-button');
 const formEditProfile = document.forms.edit;
-const formAvatar = document.forms.avatar;
-const formAddCard = document.forms.add;
 
 enableValidation({
   formSelector: '.form',
@@ -29,17 +23,13 @@ const apiConfig = {
   }
 }
 
+const api = new Api(apiConfig);
 
 export {
   profileEditBtn,
   profileAvatarEdit,
-  profileAvatarImage,
-  profileUserName,
-  profileUserDescription,
-  profileForm,
   btnAddNewCard,
   formEditProfile,
-  formAvatar,
-  formAddCard,
-  apiConfig
+  apiConfig,
+  api
 }

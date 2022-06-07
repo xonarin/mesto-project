@@ -1,96 +1,161 @@
 import './pages/index.css'; // добавьте импорт главного файла стилей
-import { handleNewCardSubmit, renderInitialCards, confirmRemove } from './components/card.js';
-import { getProfileInfo, getCards, editProfile, updateAvatar } from './components/api.js';
-import {
-  openPopup,
-  closePopup,
-  popupAddCard,
-  popupProfile,
-  popupAvatar,
-  popupConfirmDeleteBtn
-} from './components/modal.js';
+import UserInfo from './components/UserInfo.js';
+import Section from './components/Section.js';
+import Card from './components/Card.js';
+import PopupWithForm from './components/PopupWithForm.js';
+import PopupWithImage from './components/PopupWithImage.js';
 
 import {
   profileEditBtn,
   profileAvatarEdit,
-  profileAvatarImage,
-  profileUserName,
-  profileUserDescription,
-  profileForm,
   btnAddNewCard,
   formEditProfile,
-  formAvatar,
-  formAddCard
+  formAddCard,
+  api
 } from './components/utils.js';
 
 export let profileId = "";
 
-/* Получаем профиля и массива карточек по API и передаём результат в функцию renderInitialCards */
-Promise.all([getProfileInfo(), getCards()])
-  .then(([profile, card]) => {
-    profileId = profile._id;
-    profileUserName.textContent = profile.name;
-    profileUserDescription.textContent = profile.about;
-    profileAvatarImage.src = profile.avatar;
-    renderInitialCards(card);
-  })
-  .catch((err) => {
-    console.log(err);
-  })
+let cardElementDelete;
+let cardElementId;
 
-/* Функция формы для изменения профиля*/
-function handleProfileEditSubmit(event) {
-  event.preventDefault();
-  formEditProfile.elements.submit.textContent = 'Сохранение...';
-  editProfile(formEditProfile.elements.name.value, formEditProfile.elements.about.value)
+
+/* Создание экземпляра класса UserInfo */
+const profileUser = new UserInfo(".profile__user-name", ".profile__user-description", ".profile__avatar");
+
+/* Создание экземпляра класс Section и Card */
+const cardsContainer = new Section({
+  renderer: (item) => {
+    const card = new Card(
+      handleOpenCardClick,
+      handleDeleteCardClick,
+      handleLikeCardClick,
+      item,
+      profileUser.getProfileInfo(),
+      "#card-template");
+    cardsContainer.addItem(card.getCard());
+  }
+}, ".elements__list");
+
+//Создание экземпляра открытие поп апа изображения
+const popupImage = new PopupWithImage(".popup_view-image"); //
+popupImage.setEventListeners();
+
+// Создание экземпляра добавление карточки в поп ап окне
+const addCardPopup = new PopupWithForm(".popup_form_add-card", handleNewCardSubmit);
+addCardPopup.setEventListeners();
+
+// Создание экземпляра удалить карточку в поп ап окне.
+const deleteCardPopup = new PopupWithForm(".popup_delete", handleDeleteFormSubmit);
+deleteCardPopup.setEventListeners();
+
+// Создание экземпляра редактирование профиля в поп ап окне
+const editProfilePopup = new PopupWithForm('.popup_form_edit-profile', handleEditProfile);
+editProfilePopup.setEventListeners();
+
+// Создание экземпляра редактирование аватара в поп ап окне
+const editAvatarPopup = new PopupWithForm(".popup_avatar", handleEditAvatar);
+editAvatarPopup.setEventListeners();
+
+// Функцию эту передаём в экземпляр Card
+function handleDeleteCardClick(card, id) {
+  deleteCardPopup.openPopup();
+  cardElementDelete = card;
+  cardElementId = id;
+}
+// Функцию эту передаём в экземпляр Card
+function handleOpenCardClick(card) {
+  popupImage.openPopup(card.name, card.link);
+}
+
+//Добавление карточки
+function handleNewCardSubmit() {
+  const { name, image } = addCardPopup.getInputValues();
+  addCardPopup.renderLoading(true);
+  api.addCard(name, image)
+    .then((item) => {
+      cardsContainer.renderItem(item);
+      addCardPopup.closePopup();
+    })
+    .catch((err) => console.log(err))
+    .finally(() => addCardPopup.renderLoading(false, "Создать"))
+}
+
+//Удаление карточки
+function handleDeleteFormSubmit() {
+  deleteCardPopup.renderLoading(true, "Да", "Удаление...");
+  api.removeCard(cardElementId)
     .then(() => {
-      profileUserName.textContent = formEditProfile.elements.name.value;
-      profileUserDescription.textContent = formEditProfile.elements.about.value;
-      closePopup(popupProfile);
-      profileForm.reset();
+      cardElementDelete.removeCard();
+      deleteCardPopup.closePopup();
     })
-    .catch((err) => {
-      console.log(err);
+    .catch((err) => console.log(err))
+    .finally(() => deleteCardPopup.renderLoading(false, "Да"))
+}
+
+// Редактирование профиля
+function handleEditProfile() {
+  const { name, about } = editProfilePopup.getInputValues();
+  editProfilePopup.renderLoading(true);
+  api.editProfile(name, about)
+    .then((res) => {
+      profileUser.setUserInfo(res);
+      editProfilePopup.closePopup();
     })
+    .catch((err) => console.log(err))
     .finally(() => {
-      formEditProfile.elements.submit.textContent = 'Сохранить';
+      editProfilePopup.renderLoading(false);
+    })
+}
+
+// Редактирование аватара
+function handleEditAvatar() {
+  const { link } = editAvatarPopup.getInputValues();
+  editAvatarPopup.renderLoading(true);
+  api.updateAvatar(link)
+    .then((res) => {
+      console.log(editAvatarPopup.getInputValues());
+      profileUser.setUserInfo(res);
+      editAvatarPopup.closePopup();
+    })
+    .catch(err => console.log(err))
+    .finally(() => {
+      editAvatarPopup.renderLoading(false);
     })
 }
 
 
-function handleAvatarEditSubmit(event) {
-  event.preventDefault();
-  formAvatar.elements.submit.textContent = 'Сохранение...';
-  updateAvatar(formAvatar.elements.link.value)
-    .then(() => {
-      profileAvatarImage.src = formAvatar.elements.link.value;
-      closePopup(popupAvatar);
-      formAvatar.reset();
-    })
-    .catch((err) => {
-      console.log(err);
-    })
-    .finally(() => {
-      formAvatar.elements.submit.textContent = 'Сохранить';
-    })
+// Функцию эту передаём в экземпляр Card
+function handleLikeCardClick(card, id) {
+  if (card.isLiked()) {
+    api.removeLikeCard(id)
+      .then((res) => card.newCountLikes(res))
+      .catch((err) => console.log(err))
+  } else {
+    api.addLikeCard(id)
+      .then((res) => card.newCountLikes(res))
+      .catch((err) => console.log(err))
+  }
 }
 
+/* Получаем профиля и массива карточек по API и передаём результат в экземпляр класса Секции cardsContainer в метод  renderItems*/
+Promise.all([api.getProfileInfo(), api.getCards()])
+  .then(([profile, cards]) => {
+    profileUser.setUserInfo(profile);
+    cardsContainer.renderItems(cards);
+  })
+  .catch((err) => console.log(err))
 
-formAvatar.addEventListener('submit', handleAvatarEditSubmit);
-profileForm.addEventListener('submit', handleProfileEditSubmit);
-formAddCard.addEventListener('submit', handleNewCardSubmit);
+/* Открытие поп ап добавления карточки */
+btnAddNewCard.addEventListener('click', () => addCardPopup.openPopup());
 
-/* Открываем поп апы по клику на редактировать профиль и добавить карточку */
-profileEditBtn.addEventListener('click', function () {
-  formEditProfile.elements.name.value = profileUserName.textContent;
-  formEditProfile.elements.about.value = profileUserDescription.textContent;
-  openPopup(popupProfile);
-})
+/* Открытие поп ап редактирования профиля */
+profileEditBtn.addEventListener('click', () => {
+  const info = profileUser.getUserInfo();
+  formEditProfile.elements.name.value = info.name;
+  formEditProfile.elements.about.value = info.about;
+  editProfilePopup.openPopup();
+});
 
-btnAddNewCard.addEventListener('click', () => openPopup(popupAddCard));
-
-/* Открытие поп ап редактирования аватарки */
-profileAvatarEdit.addEventListener('click', () => openPopup(popupAvatar));
-
-/* Подтверждение удаления карточки */
-popupConfirmDeleteBtn.addEventListener("click", confirmRemove);
+// /* Открытие поп ап редактирования аватарки */
+profileAvatarEdit.addEventListener('click', () => editAvatarPopup.openPopup());
