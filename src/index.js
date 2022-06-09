@@ -4,6 +4,7 @@ import Section from './components/Section.js';
 import Card from './components/Card.js';
 import PopupWithForm from './components/PopupWithForm.js';
 import PopupWithImage from './components/PopupWithImage.js';
+import FormValidator from './components/FormValidator.js';
 
 import {
   profileEditBtn,
@@ -11,7 +12,8 @@ import {
   btnAddNewCard,
   formEditProfile,
   formAddCard,
-  api
+  api,
+  validationSettings
 } from './components/utils.js';
 
 export let profileId = "";
@@ -56,6 +58,25 @@ editProfilePopup.setEventListeners();
 // Создание экземпляра редактирование аватара в поп ап окне
 const editAvatarPopup = new PopupWithForm(".popup_avatar", handleEditAvatar);
 editAvatarPopup.setEventListeners();
+
+//Создаём экземпляр валидации
+
+const enableValidation = (options) => {
+  const formList = Array.from(document.querySelectorAll(options.formSelector))
+  formList.forEach((formElement) => {
+    // Поиск формы по атрибуту name
+    const nameForm = formElement.getAttribute('name')
+    // Создание класса для каждой формы "отдельно"
+    const validate = new FormValidator(options, formElement)
+    
+    // Использование класса FormValidator для нашей формы найденной в массиве formValidate
+    formValidate[nameForm] = validate;
+    validate.enableValidation();
+  });
+};
+
+const formValidate = {} // 
+enableValidation(validationSettings);
 
 // Функцию эту передаём в экземпляр Card
 function handleDeleteCardClick(card, id) {
@@ -147,10 +168,14 @@ Promise.all([api.getProfileInfo(), api.getCards()])
   .catch((err) => console.log(err))
 
 /* Открытие поп ап добавления карточки */
-btnAddNewCard.addEventListener('click', () => addCardPopup.openPopup());
+btnAddNewCard.addEventListener('click', () => {
+  addCardPopup.openPopup();
+  formValidate['add'].resetValidation();
+});
 
 /* Открытие поп ап редактирования профиля */
 profileEditBtn.addEventListener('click', () => {
+  formValidate['edit'].resetValidation();
   const info = profileUser.getUserInfo();
   formEditProfile.elements.name.value = info.name;
   formEditProfile.elements.about.value = info.about;
@@ -158,4 +183,7 @@ profileEditBtn.addEventListener('click', () => {
 });
 
 // /* Открытие поп ап редактирования аватарки */
-profileAvatarEdit.addEventListener('click', () => editAvatarPopup.openPopup());
+profileAvatarEdit.addEventListener('click', () => {
+  formValidate['avatar'].resetValidation();
+  editAvatarPopup.openPopup()
+});

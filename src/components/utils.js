@@ -1,4 +1,4 @@
-import { enableValidation } from '../components/validate.js';
+import { enableValidation } from './FormValidator.js';
 import Api from './Api.js';
 
 const profileEditBtn = document.querySelector('.profile__edit-button');
@@ -6,14 +6,14 @@ const profileAvatarEdit = document.querySelector('.profile__avatar-container');
 const btnAddNewCard = document.querySelector('.profile__add-button');
 const formEditProfile = document.forms.edit;
 
-enableValidation({
+const validationSettings = {
   formSelector: '.form',
   inputSelector: '.form__input',
   submitButtonSelector: '.form__submit',
   inactiveButtonClass: 'form__submit_disabled',
   inputErrorClass: 'form__input_type_error',
   errorClass: 'form__input-error_active'
-});
+};
 
 const apiConfig = {
   baseUrl: 'https://mesto.nomoreparties.co/v1/plus-cohort-9',
@@ -31,5 +31,7 @@ export {
   btnAddNewCard,
   formEditProfile,
   apiConfig,
-  api
+  api,
+  validationSettings 
+
 }

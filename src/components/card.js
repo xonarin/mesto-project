@@ -51,15 +51,17 @@ export default class Card {
   _getCloneElement() {
     const cardElement = document
       .querySelector(this._selector)
-      .content
-      .querySelector(".element")
+      .content.querySelector(".element")
       .cloneNode(true);
     return cardElement;
   }
 
   isLiked() {
-    // Нужно переписать этот код в идеале
-    return Boolean(this._likes.find(user => user._id === this._userId));
+    Boolean(
+      this._likes.find((user) => {
+        return user._id === this._userId;
+      })
+    );
   }
 
   // Добавление слушателей на кнопки, которые мы отрисовали ранее
