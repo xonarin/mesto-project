@@ -57,11 +57,7 @@ export default class Card {
   }
 
   isLiked() {
-    Boolean(
-      this._likes.find((user) => {
-        return user._id === this._userId;
-      })
-    );
+    return this._likes.some(user => user._id === this._userId);
   }
 
   // Добавление слушателей на кнопки, которые мы отрисовали ранее
