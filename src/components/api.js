@@ -1,7 +1,6 @@
 export default class Api {
   constructor(options) {
     this._config = options;
-
   }
 
   _checkResponse(res) {

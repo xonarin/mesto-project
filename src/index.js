@@ -5,6 +5,7 @@ import Card from './components/Card.js';
 import PopupWithForm from './components/PopupWithForm.js';
 import PopupWithImage from './components/PopupWithImage.js';
 import FormValidator from './components/FormValidator.js';
+import Api from './components/api.js'; // ИМПОРТ АПИ КЛАССА
 
 import {
   profileEditBtn,
@@ -12,9 +13,11 @@ import {
   btnAddNewCard,
   formEditProfile,
   formAddCard,
-  api,
+  apiConfig, // ИМПОРТ АПИКОНФИГА
   validationSettings
-} from './components/utils.js';
+} from './components/constants.js';
+
+const api = new Api(apiConfig); 
 
 export let profileId = "";
 
@@ -61,7 +64,7 @@ editAvatarPopup.setEventListeners();
 
 //Создаём экземпляр валидации
 
-const formValidate = {}; //
+const formvalidator = {}; //
 
 const validationCheck = (options) => {
   const formList = Array.from(document.querySelectorAll(options.formSelector))
@@ -70,11 +73,11 @@ const validationCheck = (options) => {
     // Поиск формы по атрибуту name
     const nameForm = formElement.getAttribute('name')
     // Создание класса для каждой формы "отдельно"
-    const validate = new FormValidator(options, formElement)
+    const validator = new FormValidator(options, formElement)
 
-    // Использование класса FormValidator для нашей формы найденной в массиве formValidate
-    formValidate[nameForm] = validate;
-    validate.enableValidation();
+    // Использование класса FormValidator для нашей формы найденной в массиве formvalidator
+    formvalidator[nameForm] = validator;
+    validator.enableValidation();
   });
 };
 
@@ -173,13 +176,13 @@ Promise.all([api.getProfileInfo(), api.getCards()])
 /* Открытие поп ап добавления карточки */
 btnAddNewCard.addEventListener('click', () => {
   addCardPopup.openPopup();
-  console.log(formValidate['add']);
-  formValidate['add'].resetFormValidation();
+  console.log(formvalidator['add']);
+  formvalidator['add'].resetFormValidation();
 });
 
 /* Открытие поп ап редактирования профиля */
 profileEditBtn.addEventListener('click', () => {
-  formValidate['edit'].resetFormValidation();
+  formvalidator['edit'].resetFormValidation();
   const info = profileUser.getUserInfo();
   formEditProfile.elements.name.value = info.name;
   formEditProfile.elements.about.value = info.about;
@@ -188,6 +191,6 @@ profileEditBtn.addEventListener('click', () => {
 
 // /* Открытие поп ап редактирования аватарки */
 profileAvatarEdit.addEventListener('click', () => {
-  formValidate['avatar'].resetFormValidation();
+  formvalidator['avatar'].resetFormValidation();
   editAvatarPopup.openPopup()
 });
