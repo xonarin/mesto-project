@@ -15,7 +15,7 @@ import {
   formAddCard,
   apiConfig, // ИМПОРТ АПИКОНФИГА
   validationSettings
-} from './components/constants.js';
+} from './utils/constants.js';
 
 const api = new Api(apiConfig); 
 

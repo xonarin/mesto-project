@@ -1,4 +1,4 @@
-import { enableValidation } from './FormValidator.js';
+import { enableValidation } from '../components/FormValidator.js';
 
 const profileEditBtn = document.querySelector('.profile__edit-button');
 const profileAvatarEdit = document.querySelector('.profile__avatar-container');
