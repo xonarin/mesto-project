@@ -5,7 +5,7 @@ import Card from '../components/Card.js';
 import PopupWithForm from '../components/PopupWithForm.js';
 import PopupWithImage from '../components/PopupWithImage.js';
 import FormValidator from '../components/FormValidator.js';
-import Api from '../components/api.js'; // ИМПОРТ АПИ КЛАССА
+import Api from '../components/Api.js'; // ИМПОРТ АПИ КЛАССА
 
 import {
   profileEditBtn,
