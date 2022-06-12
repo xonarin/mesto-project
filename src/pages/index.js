@@ -1,11 +1,11 @@
-import './pages/index.css'; // добавьте импорт главного файла стилей
-import UserInfo from './components/UserInfo.js';
-import Section from './components/Section.js';
-import Card from './components/Card.js';
-import PopupWithForm from './components/PopupWithForm.js';
-import PopupWithImage from './components/PopupWithImage.js';
-import FormValidator from './components/FormValidator.js';
-import Api from './components/api.js'; // ИМПОРТ АПИ КЛАССА
+import '../pages/index.css'; // добавьте импорт главного файла стилей
+import UserInfo from '../components/UserInfo.js';
+import Section from '../components/Section.js';
+import Card from '../components/Card.js';
+import PopupWithForm from '../components/PopupWithForm.js';
+import PopupWithImage from '../components/PopupWithImage.js';
+import FormValidator from '../components/FormValidator.js';
+import Api from '../components/Api.js'; // ИМПОРТ АПИ КЛАССА
 
 import {
   profileEditBtn,
@@ -15,9 +15,9 @@ import {
   formAddCard,
   apiConfig, // ИМПОРТ АПИКОНФИГА
   validationSettings
-} from './utils/constants.js';
+} from '../utils/constants.js';
 
-const api = new Api(apiConfig); 
+const api = new Api(apiConfig);
 
 export let profileId = "";
 
