@@ -24,11 +24,8 @@ export default class FormValidator {
   resetFormValidation() {
     this._toggleButtonState();
     this._inputList.forEach((inputElement) => {
-      const errorElement = this.formElement.querySelector(`.${inputElement.id}-error`);
-      this._hideInputError(inputElement, errorElement);
-      console.log(errorElement)
+      this._hideInputError(inputElement);
     });
-
   }
 
   _setEventListeners() {
